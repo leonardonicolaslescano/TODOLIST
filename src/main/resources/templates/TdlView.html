@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div align="center">
+<form th:action="@{add}" th:object="${item}" method="post">
+    <div align="middle" class="form-group row">
+        <h2>Ingrese la tarea que desea agregar</h2>
+        <div align="middle">
+            <input style="width:400px" align="center" size=8  type="text" th:field="*{name}"/>
+        </div>
+    </div>
+    <div align="middle" class="form-group">
+        <div class="col-sm-6">
+            <input type="submit" value="Agregar Tarea" class="btn btn-outline-primary"/>
+        </div>
+    </div>
+</form>
+</div>
+    <div align="middle" class="listItems" th:unless="${#lists.isEmpty(listItems)}">
+        <table class="table table-striped-columns">
+            <thead>
+            <tr>
+                <th align="middle" style="visibility:hidden" >id</th>
+                <th align="middle" >Estado</th>
+                <th align="middle" scope="col">Tarea</th>
+                <th align="middle" scope="col">Acción</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${listItems}">
+                    <td style="visibility:hidden" type="hidden" th:text="${item.id}"></td>
+                    <td align="middle"><input  type="checkbox" th:checked="${item.complete}"/></td>
+                    <td align="middle" th:text="${item.name}"></td>
+                    <td><a class="btn btn-outline-primary" th:href="@{itemStatusChange/}+${item.id}+'/true'">Completar</a><a class="btn btn-outline-primary" th:href="@{delete/}+${item.id}">Eliminar</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<div align="middle" class="listItemsComplete" th:unless="${#lists.isEmpty(listItemsComplete)}">
+    <table class="table table-striped-columns">
+        <thead>
+        <tr>
+            <th align="middle" style="visibility:hidden" >id</th>
+            <th align="middle" >Estado</th>
+            <th align="middle" scope="col">Tareas</th>
+            <th align="middle" scope="col">Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${listItemsComplete}">
+            <td style="visibility:hidden" type="hidden" th:text="${item.id}"></td>
+            <td align="middle"><input type="checkbox" th:checked="${item.complete}"/></td>
+            <td align="middle" th:text="${item.name}"></td>
+            <td><a class="btn btn-outline-primary" th:href="@{itemStatusChange/}+${item.id}+'/false'">Restaurar</a><a class="btn btn-outline-primary" th:href="@{delete/}+${item.id}">Eliminar</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
